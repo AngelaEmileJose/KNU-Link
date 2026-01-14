@@ -6,6 +6,7 @@ import { X, Check, Plus, MessageCircle, MessagesSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Post, User } from "../types";
 import { supabase } from "@/lib/supabase";
+import { ProfileMenu } from "@/components/ProfileMenu";
 
 export function SwipeFeed() {
     const router = useRouter();
@@ -256,9 +257,7 @@ export function SwipeFeed() {
                     >
                         <Plus className="w-6 h-6" />
                     </button>
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md text-2xl">
-                        {user?.icon || "👤"}
-                    </div>
+                    {user && <ProfileMenu user={user} />}
                 </div>
             </div>
 

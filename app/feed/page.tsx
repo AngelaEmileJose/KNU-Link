@@ -403,6 +403,7 @@ export function SwipeFeed() {
                         </div>
                     </div>
                 </div>
+            </div>
         </section >
     );
 }

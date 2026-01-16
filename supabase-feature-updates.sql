@@ -2,9 +2,8 @@
 -- Note: 'category' is usually just text with app-level validation, but we can make it an enum if preferred.
 -- Here we'll use TEXT with a default value.
 
-ALTER TABLE posts 
-ADD COLUMN category TEXT DEFAULT 'social',
-ADD COLUMN expiration_date TIMESTAMPTZ;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'social';
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS expiration_date TIMESTAMPTZ;
 
 -- Create index for category filtering to speed up queries
 CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category);

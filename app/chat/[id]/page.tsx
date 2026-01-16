@@ -145,7 +145,7 @@ export default function ChatPage() {
 
     if (loading) {
         return (
-            <main className="h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <main className="h-screen flex items-center justify-center bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-knu-crimson border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading chat...</p>
@@ -156,7 +156,7 @@ export default function ChatPage() {
 
     if (!post) {
         return (
-            <main className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <main className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">Activity Not Found</h1>
                     <button
@@ -171,7 +171,7 @@ export default function ChatPage() {
     }
 
     return (
-        <main className="h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-pink-50">
+        <main className="h-screen flex flex-col bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
             {/* Header */}
             <div className="bg-white shadow-md p-4">
                 <div className="max-w-4xl mx-auto flex items-center gap-4">
@@ -182,8 +182,12 @@ export default function ChatPage() {
                         <ArrowLeft className="w-5 h-5 text-gray-700" />
                     </button>
                     <div className="flex items-center gap-3 flex-1">
-                        <div className="w-12 h-12 bg-gradient-to-br from-gray-50 to-pink-50 rounded-full flex items-center justify-center text-2xl">
-                            {post.icon}
+                        <div className="w-12 h-12 bg-gradient-to-br from-red-50/40 to-amber-50/60 rounded-full flex items-center justify-center p-2">
+                            {post.icon?.startsWith('/mascot-') ? (
+                                <img src={post.icon} alt="Mascot" className="w-full h-full object-contain" />
+                            ) : (
+                                <span className="text-2xl">{post.icon}</span>
+                            )}
                         </div>
                         <div className="flex-1">
                             <h2 className="font-semibold text-gray-900">{post.activity}</h2>
@@ -210,8 +214,12 @@ export default function ChatPage() {
                                 key={msg.id}
                                 className={`flex gap-3 ${isOwnMessage ? "flex-row-reverse" : ""}`}
                             >
-                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md text-xl flex-shrink-0">
-                                    {msg.icon}
+                                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md p-1.5 flex-shrink-0">
+                                    {msg.icon?.startsWith('/mascot-') ? (
+                                        <img src={msg.icon} alt="Mascot" className="w-full h-full object-contain" />
+                                    ) : (
+                                        <span className="text-xl">{msg.icon}</span>
+                                    )}
                                 </div>
                                 <div className={`flex flex-col ${isOwnMessage ? "items-end" : ""} max-w-[70%]`}>
                                     <p className="text-xs text-gray-600 mb-1 px-2">{msg.nickname}</p>

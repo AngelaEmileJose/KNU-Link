@@ -124,7 +124,7 @@ export function SwipeFeed() {
     // Loading state
     if (loading) {
         return (
-            <section className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <section className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-knu-crimson border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading activities...</p>
@@ -136,7 +136,7 @@ export function SwipeFeed() {
     // Left swipe - Skip
     if (swipeDirection === "left") {
         return (
-            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="w-full max-w-md">
                     <div className="bg-white rounded-3xl p-8 shadow-2xl min-h-[600px] flex flex-col justify-center relative">
                         <button
@@ -174,7 +174,7 @@ export function SwipeFeed() {
     // Right swipe - Join chatroom
     if (swipeDirection === "right") {
         return (
-            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="w-full max-w-md">
                     <div className="bg-white rounded-3xl p-8 shadow-2xl min-h-[600px] flex flex-col justify-center relative">
                         <div className="text-center space-y-8">
@@ -203,7 +203,7 @@ export function SwipeFeed() {
     // No more posts
     if (!currentPost || currentPostIndex >= posts.length) {
         return (
-            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <section className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="w-full max-w-md">
                     <div className="bg-white rounded-3xl p-8 shadow-2xl min-h-[600px] flex flex-col justify-center">
                         <div className="text-center space-y-8">
@@ -239,7 +239,7 @@ export function SwipeFeed() {
 
     // Main swipe interface
     return (
-        <section className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+        <section className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
             {/* Header */}
             <div className="w-full max-w-md mx-auto mb-6 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">KNU Link</h1>
@@ -290,8 +290,16 @@ export function SwipeFeed() {
                                 onPointerCancel={handlePointerUp}
                             >
                                 {/* Emoji Display */}
-                                <div className="relative h-[60%] flex items-center justify-center bg-gradient-to-br from-gray-50 to-pink-50">
-                                    <span className="text-9xl select-none">{currentPost.icon}</span>
+                                <div className="relative h-[60%] flex items-center justify-center bg-gradient-to-br from-red-50/40 to-amber-50/60">
+                                    {currentPost.icon?.startsWith('/mascot-') ? (
+                                        <img 
+                                            src={currentPost.icon} 
+                                            alt="User mascot"
+                                            className="w-36 h-36 object-contain select-none"
+                                        />
+                                    ) : (
+                                        <span className="text-9xl select-none">{currentPost.icon}</span>
+                                    )}
 
                                     <div className="absolute bottom-4 left-4 right-4">
                                         <div className="flex items-center gap-2 mb-2">

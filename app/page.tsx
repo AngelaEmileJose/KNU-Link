@@ -4,10 +4,28 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-const emojis = [
-  "🐼", "🦊", "🤖", "🐨", "🦁", "🐯", "🐻", "🐰",
-  "🦄", "🐸", "🐙", "🦋", "🐝", "🐢", "🦉", "🦅",
-  "🐱", "🐶", "🐹", "🐭", "🐷", "🐵", "🐧", "🦁"
+// KNU Mascot Characters
+const mascotCharacters = [
+  { id: "flag", name: "Flag Bearer", image: "/mascot-flag.png" },
+  { id: "music", name: "Musician", image: "/mascot-music.png" },
+  { id: "travel", name: "Traveler", image: "/mascot-travel.png" },
+  { id: "science", name: "Scientist", image: "/mascot-science.png" },
+  { id: "soccer", name: "Soccer Player", image: "/mascot-soccer.png" },
+  { id: "headphones", name: "DJ", image: "/mascot-musician.png" },
+  { id: "romantic", name: "Romantic", image: "/mascot-romantic.png" },
+  { id: "champion", name: "Champion", image: "/mascot-champion.png" },
+  { id: "activist", name: "Activist", image: "/mascot-activist.png" },
+  { id: "eco", name: "Eco Warrior", image: "/mascot-eco.png" },
+  { id: "animals", name: "Animal Lover", image: "/mascot-animals.png" },
+  { id: "nature", name: "Nature Lover", image: "/mascot-nature.png" },
+  { id: "ocean", name: "Ocean Saver", image: "/mascot-ocean.png" },
+  { id: "earth", name: "Earth Protector", image: "/mascot-earth.png" },
+  { id: "fitness", name: "Fitness", image: "/mascot-fitness.png" },
+  { id: "foodie", name: "Foodie", image: "/mascot-foodie.png" },
+  { id: "swimmer", name: "Swimmer", image: "/mascot-swimmer.png" },
+  { id: "basketball", name: "Basketball", image: "/mascot-basketball.png" },
+  { id: "soccer-fan", name: "Soccer Fan", image: "/mascot-soccer-fan.png" },
+  { id: "football", name: "Football", image: "/mascot-football.png" },
 ];
 
 export default function LoginPage() {
@@ -139,9 +157,9 @@ export default function LoginPage() {
   // Welcome back screen for returning users
   if (welcomeBack) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
         <div className="w-full max-w-md text-center">
-          <div className="bg-white rounded-3xl shadow-xl p-12">
+          <div className="bg-white rounded-3xl shadow-xl p-12 border-t-4 border-knu-gold">
             <div className="text-6xl mb-4">👋</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h1>
             <p className="text-gray-600">Redirecting to your feed...</p>
@@ -155,7 +173,7 @@ export default function LoginPage() {
   // Step 3: Emoji Selection
   if (step === "selectEmoji") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
         <div className="w-full max-w-md">
           <button
             onClick={() => setStep("register")}
@@ -165,9 +183,9 @@ export default function LoginPage() {
             ← Back
           </button>
 
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Choose Your Icon</h1>
-            <p className="text-gray-600 mb-8">Pick an emoji that represents you</p>
+          <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Choose Your Character</h1>
+            <p className="text-gray-600 mb-8">Pick a KNU mascot character that represents you</p>
 
             {error && (
               <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
@@ -175,20 +193,27 @@ export default function LoginPage() {
               </div>
             )}
 
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              {emojis.map((emoji) => (
-                <button
-                  key={emoji}
-                  onClick={() => handleSelectEmoji(emoji)}
-                  disabled={loading}
-                  className={`text-5xl p-4 rounded-2xl transition-all duration-200 hover:scale-110 ${selectedEmoji === emoji
-                      ? "bg-knu-crimson scale-110"
+            <div className="max-h-96 overflow-y-auto mb-8 pr-2">
+              <div className="grid grid-cols-3 gap-4">
+                {mascotCharacters.map((character) => (
+                  <button
+                    key={character.id}
+                    onClick={() => handleSelectEmoji(character.image)}
+                    disabled={loading}
+                    className={`p-4 rounded-2xl transition-all duration-200 hover:scale-105 flex flex-col items-center gap-2 ${selectedEmoji === character.image
+                      ? "bg-knu-red/10 ring-2 ring-knu-red scale-105"
                       : "bg-gray-50 hover:bg-gray-100"
-                    } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-                >
-                  {emoji}
-                </button>
-              ))}
+                      } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                  >
+                    <img
+                      src={character.image}
+                      alt={character.name}
+                      className="w-20 h-20 object-contain"
+                    />
+                    <span className="text-xs font-medium text-gray-700">{character.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {loading && (
@@ -199,7 +224,7 @@ export default function LoginPage() {
 
             {!loading && (
               <p className="text-sm text-gray-500 text-center">
-                Your emoji keeps you anonymous
+                Your character keeps you anonymous
               </p>
             )}
           </div>
@@ -211,7 +236,7 @@ export default function LoginPage() {
   // Step 2: Registration Form (New Users Only)
   if (step === "register") {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+      <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
         <div className="w-full max-w-md">
           <button
             onClick={() => setStep("studentId")}
@@ -220,7 +245,7 @@ export default function LoginPage() {
             ← Back
           </button>
 
-          <div className="bg-white rounded-3xl shadow-xl p-8">
+          <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Profile</h1>
             <p className="text-gray-600 mb-8">Tell us a bit about yourself</p>
 
@@ -282,10 +307,25 @@ export default function LoginPage() {
 
   // Step 1: Student ID Entry (Default)
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-xl p-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">KNU Link</h1>
+        <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
+          {/* KNU Mascot */}
+          <div className="mb-6 flex justify-center">
+            <div className="animate-[float_3s_ease-in-out_infinite]">
+              <img
+                src="/knu-mascot.png"
+                alt="KNU Mascot"
+                className="w-32 h-32 object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="mb-6 text-center">
+            <h1 className="text-4xl font-bold mb-1">
+              <span className="gradient-text">KNU Link</span>
+            </h1>
+          </div>
           <p className="text-gray-600 mb-8">Connect anonymously with KNU students</p>
 
           {error && (

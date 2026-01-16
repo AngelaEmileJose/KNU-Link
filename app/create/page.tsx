@@ -55,7 +55,7 @@ export default function CreatePostPage() {
     };
 
     return (
-        <main className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-gray-50 to-pink-50">
+        <main className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
             <div className="w-full max-w-md mx-auto">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-8">
@@ -71,8 +71,12 @@ export default function CreatePostPage() {
                 {/* Form */}
                 <div className="bg-white rounded-3xl shadow-xl p-8 space-y-6">
                     <div className="text-center mb-6">
-                        <div className="w-20 h-20 bg-gradient-to-br from-gray-50 to-pink-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <span className="text-4xl">{user?.icon || "👤"}</span>
+                        <div className="w-20 h-20 bg-gradient-to-br from-red-50/40 to-amber-50/60 rounded-full flex items-center justify-center mx-auto mb-3 p-3">
+                            {user?.icon ? (
+                                <img src={user.icon} alt="Your mascot" className="w-full h-full object-contain" />
+                            ) : (
+                                <span className="text-4xl">👤</span>
+                            )}
                         </div>
                         <p className="text-sm text-gray-600">{user?.nickname}</p>
                     </div>

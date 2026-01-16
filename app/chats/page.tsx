@@ -63,7 +63,7 @@ export default function ChatsPage() {
 
     if (loading) {
         return (
-            <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-knu-crimson border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading your chats...</p>
@@ -73,7 +73,7 @@ export default function ChatsPage() {
     }
 
     return (
-        <main className="min-h-screen flex flex-col bg-gradient-to-br from-white via-gray-50 to-pink-50">
+        <main className="min-h-screen flex flex-col bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
             {/* Header */}
             <div className="bg-white shadow-md p-4">
                 <div className="max-w-4xl mx-auto flex items-center gap-4">
@@ -112,8 +112,16 @@ export default function ChatsPage() {
                                     onClick={() => router.push(`/chat/${post.id}`)}
                                     className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all cursor-pointer p-6 flex items-center gap-4"
                                 >
-                                    <div className="w-16 h-16 bg-gradient-to-br from-gray-50 to-pink-50 rounded-full flex items-center justify-center text-3xl flex-shrink-0">
-                                        {post.icon}
+                                    <div className="w-16 h-16 bg-gradient-to-br from-red-50/40 to-amber-50/60 rounded-full flex items-center justify-center p-2 flex-shrink-0">
+                                        {post.icon?.startsWith('/mascot-') ? (
+                                            <img 
+                                                src={post.icon} 
+                                                alt="Mascot" 
+                                                className="w-full h-full object-contain"
+                                            />
+                                        ) : (
+                                            <span className="text-3xl">{post.icon}</span>
+                                        )}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <h3 className="font-semibold text-gray-900 text-lg mb-1">

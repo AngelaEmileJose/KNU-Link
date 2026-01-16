@@ -48,11 +48,17 @@ Students often struggle to find partners for activities due to social anxiety or
 - Automatic login from stored sessions
 - Secure logout with account switching
 
-### 2. **Anonymous Profiles**
+### 2. **Anonymous Profiles with KNU Mascot Icons**
 - Student ID verification (not shown to others)
 - Custom nickname and gender
-- Emoji avatar selection (24 options)
+- **20 unique KNU mascot characters** to choose from:
+  - **Original Set**: Flag Bearer, Musician, Traveler, Scientist, Soccer Player
+  - **Personality Set**: DJ, Romantic, Champion, Activist, Eco Warrior
+  - **Environmental Set**: Animal Lover, Nature Lover, Ocean Saver, Earth Protector
+  - **Sports & Lifestyle Set**: Fitness, Foodie, Swimmer, Basketball, Soccer Fan, Football
+- Scrollable mascot selection grid for easy browsing
 - Profile stored in Supabase with localStorage caching
+- Backward compatible with legacy emoji icons
 
 ### 3. **Tinder-Style Activity Feed**
 - Swipe left to **skip** an activity

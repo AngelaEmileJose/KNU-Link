@@ -85,6 +85,17 @@ Students often struggle to find partners for activities due to social anxiety or
 - Choose emoji icon for the activity
 - Instant publishing to feed
 
+### 7. **Activity Categories & Expiration**
+- **5 Categories:** Social, Study, Sports, Food, Other
+- **Color-coded Badges:** Visual indicators for each category
+- **Filtering:** Filter feed by category (All, Social, Study, etc.)
+- **Expiration Dates:** Auto-removal of old activities
+
+### 8. **PWA Support**
+- **Installable:** Add to home screen on mobile
+- **Offline Support:** Basic caching via Service Worker
+- **App-like Experience:** Standalone mode, theme colors, splash icons
+
 ---
 
 ## 🛠 Technology Stack
@@ -147,8 +158,12 @@ knu-link/
 ├── public/                       # Static assets
 │   ├── file.svg
 │   ├── globe.svg
-│   ├── next.svg
-│   ├── vercel.svg
+  ├── icon-192.png              # PWA icon (192x192)
+  ├── icon-512.png              # PWA icon (512x512)
+  ├── manifest.json             # PWA manifest
+  ├── next.svg
+  ├── sw.js                     # Service Worker script
+  ├── vercel.svg
 │   └── window.svg
 │
 ├── .env.local                    # Environment variables (gitignored)

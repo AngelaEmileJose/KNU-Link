@@ -19,6 +19,16 @@ export function SwipeFeed() {
     const startX = useRef(0);
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+    const categories = [
+        { id: "all", label: "All", icon: "🌟" },
+        { id: "social", label: "Social", icon: "💬" },
+        { id: "study", label: "Study", icon: "📚" },
+        { id: "sports", label: "Sports", icon: "🏃" },
+        { id: "food", label: "Food", icon: "🍽️" },
+        { id: "other", label: "Other", icon: "✨" },
+    ];
 
     useEffect(() => {
         const userData = localStorage.getItem("user");
@@ -31,16 +41,28 @@ export function SwipeFeed() {
 
         // Fetch posts from Supabase
         const fetchPosts = async () => {
-            const { data, error } = await supabase
+            setLoading(true);
+            let query = supabase
                 .from('posts')
                 .select('*')
-                .order('created_at', { ascending: false })
-                .limit(20);
+                .order('created_at', { ascending: false });
+
+            if (selectedCategory !== "all") {
+                query = query.eq('category', selectedCategory);
+            }
+
+            const { data, error } = await query;
 
             if (error) {
                 console.error('Error fetching posts:', error);
             } else if (data) {
-                setPosts(data as Post[]);
+                // Filter out expired posts
+                const now = new Date();
+                const validPosts = data.filter((post: Post) => {
+                    if (!post.expiration_date) return true;
+                    return new Date(post.expiration_date) > now;
+                });
+                setPosts(validPosts as Post[]);
             }
             setLoading(false);
         };
@@ -51,9 +73,9 @@ export function SwipeFeed() {
         const channel = supabase
             .channel('posts-channel')
             .on('postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'posts' },
-                (payload) => {
-                    setPosts((current) => [payload.new as Post, ...current]);
+                { event: '*', schema: 'public', table: 'posts' },
+                () => {
+                    fetchPosts(); // Refetch to apply filters
                 }
             )
             .subscribe();
@@ -61,7 +83,7 @@ export function SwipeFeed() {
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [router]);
+    }, [router, selectedCategory]);
 
     const currentPost = posts[currentPostIndex];
 
@@ -261,6 +283,27 @@ export function SwipeFeed() {
                 </div>
             </div>
 
+            {/* Category Filters */}
+            <div className="w-full max-w-md mx-auto mb-4 overflow-x-auto pb-2 scrollbar-hide">
+                <div className="flex gap-2">
+                    {categories.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => {
+                                setSelectedCategory(cat.id);
+                                setCurrentPostIndex(0);
+                            }}
+                            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${selectedCategory === cat.id
+                                ? "bg-knu-crimson text-white shadow-md transform scale-105"
+                                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-100"
+                                }`}
+                        >
+                            <span className="mr-1">{cat.icon}</span> {cat.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             {/* Swipe Card */}
             <div className="flex-1 flex items-center justify-center">
                 <div className="w-full max-w-md">
@@ -292,23 +335,41 @@ export function SwipeFeed() {
                                 {/* Emoji Display */}
                                 <div className="relative h-[60%] flex items-center justify-center bg-gradient-to-br from-red-50/40 to-amber-50/60">
                                     {currentPost.icon?.startsWith('/mascot-') ? (
-                                        <img 
-                                            src={currentPost.icon} 
+                                        <img
+                                            src={currentPost.icon}
                                             alt="User mascot"
                                             className="w-36 h-36 object-contain select-none"
                                         />
                                     ) : (
                                         <span className="text-9xl select-none">{currentPost.icon}</span>
                                     )}
+                                    {/* Category Badge */}
+                                    <div className="absolute top-4 left-4">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm ${currentPost.category === 'study' ? 'bg-blue-500' :
+                                            currentPost.category === 'sports' ? 'bg-green-500' :
+                                                currentPost.category === 'food' ? 'bg-orange-500' :
+                                                    currentPost.category === 'social' ? 'bg-purple-500' :
+                                                        'bg-gray-500'
+                                            }`}>
+                                            {categories.find(c => c.id === currentPost.category)?.label || 'Activity'}
+                                        </span>
+                                    </div>
 
                                     <div className="absolute bottom-4 left-4 right-4">
                                         <div className="flex items-center gap-2 mb-2">
                                             <h2 className="text-2xl font-bold text-gray-900">{currentPost.nickname}</h2>
                                         </div>
-                                        <p className="text-sm text-gray-700 font-medium">{currentPost.time}</p>
-                                        {currentPost.location && (
-                                            <p className="text-xs text-gray-600">📍 {currentPost.location}</p>
-                                        )}
+                                        <div className="flex flex-col gap-1">
+                                            <p className="text-sm text-gray-700 font-medium">{currentPost.time}</p>
+                                            {currentPost.location && (
+                                                <p className="text-xs text-gray-600">📍 {currentPost.location}</p>
+                                            )}
+                                            {currentPost.expiration_date && (
+                                                <p className="text-xs text-red-500 font-medium">
+                                                    ⏳ Expires in {Math.ceil((new Date(currentPost.expiration_date).getTime() - new Date().getTime()) / (1000 * 60 * 60))}h
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -342,8 +403,7 @@ export function SwipeFeed() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+        </section >
     );
 }
 

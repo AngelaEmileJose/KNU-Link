@@ -10,7 +10,9 @@ export default function CreatePostPage() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [activity, setActivity] = useState("");
+    const [category, setCategory] = useState("social");
     const [time, setTime] = useState("");
+    const [expirationDate, setExpirationDate] = useState("");
     const [location, setLocation] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -39,8 +41,10 @@ export default function CreatePostPage() {
                         nickname: user.nickname,
                         icon: user.icon,
                         activity: activity,
+                        category: category,
                         time: time,
-                        location: location || null
+                        location: location || null,
+                        expiration_date: expirationDate ? new Date(expirationDate).toISOString() : null
                     }
                 ]);
 
@@ -103,6 +107,25 @@ export default function CreatePostPage() {
                     </div>
 
                     <div>
+                        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                            Category *
+                        </label>
+                        <select
+                            id="category"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors appearance-none bg-white"
+                            disabled={loading}
+                        >
+                            <option value="social">💬 Social & Chat</option>
+                            <option value="study">📚 Study & Work</option>
+                            <option value="sports">🏃 Sports & Exercise</option>
+                            <option value="food">🍽️ Food & Dining</option>
+                            <option value="other">✨ Other Activity</option>
+                        </select>
+                    </div>
+
+                    <div>
                         <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
                             When? *
                         </label>
@@ -115,6 +138,22 @@ export default function CreatePostPage() {
                             className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors"
                             disabled={loading}
                         />
+                    </div>
+
+                    <div>
+                        <label htmlFor="expiration" className="block text-sm font-medium text-gray-700 mb-2">
+                            Expires At (Auto-delete)
+                        </label>
+                        <input
+                            id="expiration"
+                            type="datetime-local"
+                            value={expirationDate}
+                            onChange={(e) => setExpirationDate(e.target.value)}
+                            min={new Date().toISOString().slice(0, 16)}
+                            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors"
+                            disabled={loading}
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Leave empty to keep indefinitely</p>
                     </div>
 
                     <div>

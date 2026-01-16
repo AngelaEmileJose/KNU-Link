@@ -11,13 +11,15 @@ export interface User {
 
 export interface Post {
   id: number;
-  user_id?: string;
+  user_id: string;
   nickname: string;
   icon: string;
   activity: string;
+  category: string;
   time: string;
   location?: string;
-  created_at?: string;
+  expiration_date?: string;
+  created_at: string;
 }
 
 export interface ChatMessage {

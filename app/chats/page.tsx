@@ -114,9 +114,9 @@ export default function ChatsPage() {
                                 >
                                     <div className="w-16 h-16 bg-gradient-to-br from-red-50/40 to-amber-50/60 rounded-full flex items-center justify-center p-2 flex-shrink-0">
                                         {post.icon?.startsWith('/mascot-') ? (
-                                            <img 
-                                                src={post.icon} 
-                                                alt="Mascot" 
+                                            <img
+                                                src={post.icon}
+                                                alt="Mascot"
                                                 className="w-full h-full object-contain"
                                             />
                                         ) : (
@@ -124,19 +124,33 @@ export default function ChatsPage() {
                                         )}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                                            {post.activity}
-                                        </h3>
-                                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                                            <span>{post.nickname}</span>
-                                            <span>•</span>
-                                            <span>{post.time}</span>
-                                            {post.location && (
-                                                <>
-                                                    <span>•</span>
-                                                    <span>📍 {post.location}</span>
-                                                </>
-                                            )}
+                                        <div className="flex flex-col gap-1">
+                                            <div className="flex items-center gap-2">
+                                                <h3 className="font-semibold text-gray-900 text-lg mb-0 truncate">
+                                                    {post.activity}
+                                                </h3>
+                                                {post.category && (
+                                                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wider ${post.category === 'study' ? 'bg-blue-500' :
+                                                            post.category === 'sports' ? 'bg-green-500' :
+                                                                post.category === 'food' ? 'bg-orange-500' :
+                                                                    post.category === 'social' ? 'bg-purple-500' :
+                                                                        'bg-gray-500'
+                                                        }`}>
+                                                        {post.category}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-3 text-sm text-gray-600">
+                                                <span>{post.nickname}</span>
+                                                <span>•</span>
+                                                <span>{post.time}</span>
+                                                {post.location && (
+                                                    <>
+                                                        <span>•</span>
+                                                        <span>📍 {post.location}</span>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <MessageCircle className="w-6 h-6 text-knu-crimson flex-shrink-0" />

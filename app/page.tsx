@@ -159,7 +159,7 @@ export default function LoginPage() {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
         <div className="w-full max-w-md text-center">
-          <div className="bg-white rounded-3xl shadow-xl p-12 border-t-4 border-knu-gold">
+          <div className="bg-white rounded-3xl shadow-lg p-12 border-t-4 border-knu-gold">
             <div className="text-6xl mb-4">👋</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h1>
             <p className="text-gray-600">Redirecting to your feed...</p>
@@ -183,7 +183,7 @@ export default function LoginPage() {
             ← Back
           </button>
 
-          <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
+          <div className="bg-white rounded-3xl shadow-lg p-8 border-t-4 border-knu-red">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Choose Your Character</h1>
             <p className="text-gray-600 mb-8">Pick a KNU mascot character that represents you</p>
 
@@ -245,7 +245,7 @@ export default function LoginPage() {
             ← Back
           </button>
 
-          <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
+          <div className="bg-white rounded-3xl shadow-lg p-8 border-t-4 border-knu-red">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Profile</h1>
             <p className="text-gray-600 mb-8">Tell us a bit about yourself</p>
 
@@ -266,7 +266,7 @@ export default function LoginPage() {
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   placeholder="Choose a fun nickname"
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors text-gray-900"
                   autoFocus
                 />
               </div>
@@ -279,7 +279,7 @@ export default function LoginPage() {
                   id="gender"
                   value={gender}
                   onChange={(e) => setGender(e.target.value as "male" | "female" | "other")}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors text-gray-900"
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -309,7 +309,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-xl p-8 border-t-4 border-knu-red">
+        <div className="bg-white rounded-3xl shadow-lg p-8 border-t-4 border-knu-red">
           {/* KNU Mascot */}
           <div className="mb-6 flex justify-center">
             <div className="animate-[float_3s_ease-in-out_infinite]">
@@ -346,7 +346,7 @@ export default function LoginPage() {
                 onChange={(e) => setStudentId(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleStudentIdSubmit()}
                 placeholder="202400000"
-                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-knu-crimson focus:outline-none transition-colors text-gray-900"
                 autoFocus
               />
             </div>

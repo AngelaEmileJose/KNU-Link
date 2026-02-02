@@ -193,12 +193,12 @@ export default function LoginPage() {
               </div>
             )}
 
-            <div className="max-h-96 overflow-y-auto mb-8 pr-2">
+            <div className="max-h-96 overflow-y-auto mb-6 pr-2">
               <div className="grid grid-cols-3 gap-4">
                 {mascotCharacters.map((character) => (
                   <button
                     key={character.id}
-                    onClick={() => handleSelectEmoji(character.image)}
+                    onClick={() => setSelectedEmoji(character.image)}
                     disabled={loading}
                     className={`p-4 rounded-2xl transition-all duration-200 hover:scale-105 flex flex-col items-center gap-2 ${selectedEmoji === character.image
                       ? "bg-knu-red/10 ring-2 ring-knu-red scale-105"
@@ -216,11 +216,13 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {loading && (
-              <p className="text-sm text-gray-600 text-center animate-pulse">
-                Setting up your profile...
-              </p>
-            )}
+            <button
+              onClick={() => handleSelectEmoji(selectedEmoji)}
+              disabled={!selectedEmoji || loading}
+              className="w-full bg-knu-crimson hover:bg-knu-crimson-dark text-white font-semibold py-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl mb-4"
+            >
+              {loading ? "Setting up your profile..." : "Continue"}
+            </button>
 
             {!loading && (
               <p className="text-sm text-gray-500 text-center">

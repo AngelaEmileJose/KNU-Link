@@ -20,6 +20,9 @@ export function SwipeFeed() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
+    const [pullToRefresh, setPullToRefresh] = useState({ pulling: false, distance: 0 });
+    const pullStartY = useRef(0);
+    const containerRef = useRef<HTMLElement>(null);
 
     const categories = [
         { id: "all", label: "All", icon: "🌟" },
@@ -30,6 +33,34 @@ export function SwipeFeed() {
         { id: "other", label: "Other", icon: "✨" },
     ];
 
+    // Fetch posts function (extracted for reuse)
+    const fetchPosts = async () => {
+        setLoading(true);
+        let query = supabase
+            .from('posts')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (selectedCategory !== "all") {
+            query = query.eq('category', selectedCategory);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error('Error fetching posts:', error);
+        } else if (data) {
+            // Filter out expired posts
+            const now = new Date();
+            const validPosts = data.filter((post: Post) => {
+                if (!post.expiration_date) return true;
+                return new Date(post.expiration_date) > now;
+            });
+            setPosts(validPosts as Post[]);
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
@@ -38,34 +69,6 @@ export function SwipeFeed() {
             router.push("/");
             return;
         }
-
-        // Fetch posts from Supabase
-        const fetchPosts = async () => {
-            setLoading(true);
-            let query = supabase
-                .from('posts')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (selectedCategory !== "all") {
-                query = query.eq('category', selectedCategory);
-            }
-
-            const { data, error } = await query;
-
-            if (error) {
-                console.error('Error fetching posts:', error);
-            } else if (data) {
-                // Filter out expired posts
-                const now = new Date();
-                const validPosts = data.filter((post: Post) => {
-                    if (!post.expiration_date) return true;
-                    return new Date(post.expiration_date) > now;
-                });
-                setPosts(validPosts as Post[]);
-            }
-            setLoading(false);
-        };
 
         fetchPosts();
 
@@ -84,6 +87,35 @@ export function SwipeFeed() {
             supabase.removeChannel(channel);
         };
     }, [router, selectedCategory]);
+
+    // Pull-to-refresh handlers
+    const handlePullStart = (e: React.TouchEvent) => {
+        const container = containerRef.current;
+        if (container && container.scrollTop === 0) {
+            pullStartY.current = e.touches[0].clientY;
+            setPullToRefresh({ pulling: true, distance: 0 });
+        }
+    };
+
+    const handlePullMove = (e: React.TouchEvent) => {
+        if (!pullToRefresh.pulling) return;
+
+        const distance = Math.max(0, (e.touches[0].clientY - pullStartY.current) * 0.4);
+        if (distance > 0 && distance < 150) {
+            setPullToRefresh({ pulling: true, distance });
+        }
+    };
+
+    const handlePullEnd = async () => {
+        if (pullToRefresh.distance > 80) {
+            setPullToRefresh({ pulling: false, distance: 80 });
+            await fetchPosts();
+            setCurrentPostIndex(0);
+            setTimeout(() => setPullToRefresh({ pulling: false, distance: 0 }), 300);
+        } else {
+            setPullToRefresh({ pulling: false, distance: 0 });
+        }
+    };
 
     const currentPost = posts[currentPostIndex];
 
@@ -261,7 +293,29 @@ export function SwipeFeed() {
 
     // Main swipe interface
     return (
-        <section className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40">
+        <section
+            ref={containerRef}
+            className="min-h-screen flex flex-col p-6 bg-gradient-to-br from-white via-red-50/30 to-amber-50/40 overflow-y-auto relative"
+            onTouchStart={handlePullStart}
+            onTouchMove={handlePullMove}
+            onTouchEnd={handlePullEnd}
+            style={{ transform: `translateY(${pullToRefresh.distance}px)`, transition: pullToRefresh.pulling ? 'none' : 'transform 0.3s ease-out' }}
+        >
+            {/* Pull-to-Refresh Indicator */}
+            {pullToRefresh.distance > 0 && (
+                <div className="absolute top-2 left-0 right-0 flex items-center justify-center pointer-events-none z-50">
+                    <div className="text-gray-600 text-sm font-medium flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow-md">
+                        {pullToRefresh.distance > 80 ? (
+                            <>
+                                <div className="w-4 h-4 border-2 border-knu-crimson border-t-transparent rounded-full animate-spin"></div>
+                                Release to refresh
+                            </>
+                        ) : (
+                            <>↓ Pull down</>
+                        )}
+                    </div>
+                </div>
+            )}
             {/* Header */}
             <div className="w-full max-w-md mx-auto mb-6 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900">KNU Link</h1>

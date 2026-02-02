@@ -121,6 +121,10 @@ export default function LoginPage() {
     setError("");
 
     try {
+      // Log for debugging
+      console.log("Attempting to create profile with:", { studentId, nickname, gender, icon: emoji });
+      console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+
       // Create new user in Supabase
       const { data: newUser, error: insertError } = await supabase
         .from('profiles')
@@ -135,7 +139,12 @@ export default function LoginPage() {
         .select()
         .single();
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error("Supabase insert error:", insertError);
+        throw insertError;
+      }
+
+      console.log("Profile created successfully:", newUser);
 
       // Store user data in localStorage
       localStorage.setItem("user", JSON.stringify({
@@ -149,7 +158,22 @@ export default function LoginPage() {
 
       router.push("/feed");
     } catch (err: any) {
-      setError(err.message || "Failed to create account");
+      console.error("Full error object:", err);
+
+      // Provide more specific error messages
+      let errorMessage = "Failed to create account";
+
+      if (err.message) {
+        if (err.message.includes("fetch")) {
+          errorMessage = "Network error: Unable to connect to server. Please check your internet connection.";
+        } else if (err.message.includes("duplicate")) {
+          errorMessage = "This student ID is already registered. Please use the login flow.";
+        } else {
+          errorMessage = err.message;
+        }
+      }
+
+      setError(errorMessage);
       setLoading(false);
     }
   };

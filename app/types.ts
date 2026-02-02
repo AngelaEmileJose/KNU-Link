@@ -32,3 +32,5 @@ export interface ChatMessage {
   timestamp: Date;
   created_at?: string;
 }
+
+

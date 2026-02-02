@@ -17,6 +17,9 @@ export default function ChatPage() {
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+
+
+
     useEffect(() => {
         const userData = localStorage.getItem("user");
         if (userData) {
@@ -194,10 +197,10 @@ export default function ChatPage() {
                                 <h2 className="font-semibold text-gray-900">{post.activity}</h2>
                                 {post.category && (
                                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wider ${post.category === 'study' ? 'bg-blue-500' :
-                                            post.category === 'sports' ? 'bg-green-500' :
-                                                post.category === 'food' ? 'bg-orange-500' :
-                                                    post.category === 'social' ? 'bg-purple-500' :
-                                                        'bg-gray-500'
+                                        post.category === 'sports' ? 'bg-green-500' :
+                                            post.category === 'food' ? 'bg-orange-500' :
+                                                post.category === 'social' ? 'bg-purple-500' :
+                                                    'bg-gray-500'
                                         }`}>
                                         {post.category}
                                     </span>
@@ -206,6 +209,8 @@ export default function ChatPage() {
                             <p className="text-sm text-gray-600">{post.time} • {post.location}</p>
                         </div>
                     </div>
+
+
                 </div>
             </div>
 
@@ -220,6 +225,7 @@ export default function ChatPage() {
 
                     {messages.map((msg) => {
                         const isOwnMessage = msg.userId === user?.id;
+
 
                         return (
                             <div
@@ -243,9 +249,16 @@ export default function ChatPage() {
                                     >
                                         <p>{msg.message}</p>
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-1 px-2">
-                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </p>
+
+
+
+                                    <div className={`flex items-center gap-2 mt-1 px-2 ${isOwnMessage ? "flex-row-reverse" : ""}`}>
+                                        <p className="text-xs text-gray-500">
+                                            {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+
+
+                                    </div>
                                 </div>
                             </div>
                         );

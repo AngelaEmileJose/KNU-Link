@@ -18,17 +18,10 @@ export const metadata: Metadata = {
   title: "KNU Link - Anonymous Social Discovery",
   description: "Connect anonymously with Kyungpook National University students",
   manifest: "/manifest.json",
-  themeColor: "#8B1538",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "KNU Link",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
   },
   icons: {
     icon: [
@@ -40,6 +33,15 @@ export const metadata: Metadata = {
     ],
   },
 };
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#8B1538",
+};
+
 
 export default function RootLayout({
   children,
